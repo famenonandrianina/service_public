@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Publics Dembéni | Accueil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="loader-container">
+        <div class="glass-loader">
+            <div class="spinner"></div>
+            <p>Chargement...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-landmark"></i>
+                <div class="logo-text">
+                    <span class="brand">DEMBÉNI</span>
+                    <span class="sub-brand">Services Publics</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="register.html" class="btn-register-nav glass">S'inscrire</a></li>
+            </ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero shadow-glow">
+            <div class="hero-content glass" data-aos="fade-up">
+                <span class="badge">Ville de Dembéni</span>
+                <h1>Simplifier <span class="text-gradient">votre quotidien</span></h1>
+                <p>Accédez à tous vos services publics locaux avec une interface moderne, rapide et sécurisée. La mairie de Dembéni s'engage pour vous.</p>
+                <div class="hero-btns">
+                    <a href="services.html" class="btn btn-primary">Découvrir nos services</a>
+                    <a href="#about" class="btn btn-secondary glass">En savoir plus</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Nos Services Phares</h2>
+                    <p>Une administration proche de ses citoyens.</p>
+                </div>
+                <div class="grid grid-3">
+                    <div class="card glass" data-aos="fade-up" data-aos-delay="100">
+                        <i class="fas fa-house-chimney icon-box blue"></i>
+                        <h3>France Services</h3>
+                        <p>Un accueil de proximité pour toutes vos démarches administratives du quotidien.</p>
+                        <a href="services.html" class="read-more">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="card glass" data-aos="fade-up" data-aos-delay="200">
+                        <i class="fas fa-cart-shopping icon-box green"></i>
+                        <h3>Épicerie Solidaire</h3>
+                        <p>Douka Latru : Accompagnement alimentaire et social pour les familles en difficulté.</p>
+                        <a href="services.html" class="read-more">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="card glass" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-seedling icon-box red"></i>
+                        <h3>Projets Agricoles</h3>
+                        <p>Soutien au développement rural et accompagnement des porteurs de projets locaux.</p>
+                        <a href="services.html" class="read-more">En savoir plus <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section class="section bg-glass">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">Actualités de la Commune</h2>
+                </div>
+                <div class="news-container">
+                    <div class="news-card glass" data-aos="fade-right">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe1?q=80&w=600&auto=format&fit=crop" alt="News">
+                        </div>
+                        <div class="news-body">
+                            <span class="news-tag alerte">Alerte</span>
+                            <h4>Collecte des ordures ménagères</h4>
+                            <p>Information sur les nouveaux horaires de ramassage pour le quartier de Tsararano.</p>
+                            <span class="date">12 Mai 2026</span>
+                        </div>
+                    </div>
+                    <div class="news-card glass" data-aos="fade-left">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop" alt="News">
+                        </div>
+                        <div class="news-body">
+                            <span class="news-tag info">Info</span>
+                            <h4>Inauguration de la Maison de Jeunes</h4>
+                            <p>Venez célébrer l'ouverture du nouvel espace dédié à la jeunesse de Dembéni.</p>
+                            <span class="date">15 Mai 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="section">
+            <div class="container text-center">
+                <h2 class="section-title" data-aos="fade-up">Dembéni en Images</h2>
+                <div class="gallery" data-aos="zoom-in">
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=600&auto=format&fit=crop" alt="Dembéni 1" class="glass-img">
+                    <img src="https://images.unsplash.com/photo-1533659828870-95ee305cee3e?q=80&w=600&auto=format&fit=crop" alt="Dembéni 2" class="glass-img">
+                    <img src="https://images.unsplash.com/photo-1428366410021-4e4d350c6745?q=80&w=600&auto=format&fit=crop" alt="Dembéni 3" class="glass-img">
+                    <img src="https://images.unsplash.com/photo-1540331547168-8b63109225b7?q=80&w=600&auto=format&fit=crop" alt="Dembéni 4" class="glass-img">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass">
+        <div class="container footer-grid">
+            <div class="footer-info">
+                <h3>MAIRIE DE DEMBÉNI</h3>
+                <p>Au service des citoyens de Mayotte. Ensemble construire l'avenir de notre commune.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Liens Utiles</h4>
+                <ul>
+                    <li><a href="#">Mentions Légales</a></li>
+                    <li><a href="#">Plan du site</a></li>
+                    <li><a href="#">Accessibilité</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Suivez-nous</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Mairie de Dembéni. Tous droits réservés.
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

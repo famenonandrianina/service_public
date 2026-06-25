@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S'inscrire | Dembéni</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-landmark"></i>
+                <div class="logo-text">
+                    <span class="brand">DEMBÉNI</span>
+                    <span class="sub-brand">Services Publics</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="register.html" class="active btn-register-nav glass">S'inscrire</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 150px; padding-bottom: 80px;">
+        <div class="form-container glass shadow-glow" data-aos="zoom-in" style="max-width: 500px;">
+            <div class="text-center mb-4">
+                <h2 class="section-title">Inscription</h2>
+                <p>Gérez vos démarches facilement.</p>
+            </div>
+            
+            <form id="registerForm" onsubmit="return validateRegisterForm(event)">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="firstName">Prénom</label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Jean" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Nom</label>
+                        <input type="text" id="lastName" class="form-control" placeholder="Dupont" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="exemple@mail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full shadow-glow">
+                    Créer mon compte <i class="fas fa-user-plus"></i>
+                </button>
+            </form>
+            <div class="text-center mt-4">
+                <p style="font-size: 13px; color: #64748b;">Déjà un compte ? <a href="#" style="color: var(--primary); font-weight: 700;">Se connecter</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass">
+        <div class="copyright">&copy; 2026 Mairie de Dembéni</div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

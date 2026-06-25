@@ -1,0 +1,69 @@
+/* ── servicepublic.css ───────────────────────────────────── */
+
+/* Hero */
+.sp-hero {
+  min-height: 480px;
+  background: linear-gradient(135deg, #166534 0%, #15803d 50%, #16a34a 100%);
+}
+
+/* Decorative blobs */
+.sp-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.25;
+}
+.sp-blob-1 {
+  width: 420px;
+  height: 420px;
+  background: #34d399;
+  top: -120px;
+  left: -100px;
+  animation: sp-blob-float 9s ease-in-out infinite alternate;
+}
+.sp-blob-2 {
+  width: 320px;
+  height: 320px;
+  background: #3b82f6;
+  bottom: -80px;
+  right: -80px;
+  animation: sp-blob-float 11s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes sp-blob-float {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, -30px) scale(1.08); }
+}
+
+/* Category filter buttons */
+.sp-cat-btn {
+  padding: 6px 18px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.sp-cat-active {
+  background: #166534;
+  color: #ffffff;
+  border-color: #166534;
+  box-shadow: 0 4px 14px rgba(22,101,52,0.3);
+}
+.sp-cat-inactive {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+.sp-cat-inactive:hover {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+/* Hide scrollbar for filter strip */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

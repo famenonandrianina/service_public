@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Dembéni</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Left Side (Curved) -->
+        <div class="login-left">
+            <div class="logo-area">
+                <img src="/images/logo_dembeni.png" alt="Logo" class="logo-img">
+                <span class="logo-text">DEMBENI</span>
+            </div>
+            
+            <div class="welcome-text">
+                <h1>Bienvenue<br><span class="italic">de retour...</span></h1>
+                <p>Faciliter l'accès aux droits et aux services pour tous.</p>
+            </div>
+
+            <div class="footer-links">
+                <p>© 2026 Mairie de Dembéni</p>
+            </div>
+
+            <!-- The X Button (Floating) -->
+            <a href="services.html" class="close-btn"><i class="fas fa-times"></i></a>
+        </div>
+
+        <!-- Right Side (Form) -->
+        <div class="login-right">
+            <div class="glass-form">
+                <div class="role-selector">
+                    <button class="role-btn active" data-role="citoyen">
+                        <i class="fas fa-user"></i> Citoyen
+                    </button>
+                    <button class="role-btn" data-role="admin">
+                        <i class="fas fa-user-shield"></i> Administrateur
+                    </button>
+                </div>
+
+                <h2 id="form-title">Connexion Citoyen</h2>
+                <p class="form-subtitle">Entrez vos identifiants pour continuer</p>
+
+                <form id="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Mot de passe" required>
+                    </div>
+
+                    <div class="form-options">
+                        <label><input type="checkbox"> Se souvenir</label>
+                        <a href="#">Oublié ?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="submit-btn">Se Connecter</button>
+                </form>
+
+                <div class="register-link" id="reg-link">
+                    Pas encore de compte ? <a href="#">S'inscrire ici</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
