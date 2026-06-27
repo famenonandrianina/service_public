@@ -3,63 +3,114 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 const path = require('path');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
-// Connect to MongoDB
+// Initialisation de la base de données
 connectDB();
 
 const app = express();
 
-// Security middleware
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({
-  origin: [process.env.CLIENT_URL || 'http://localhost:5174', 'http://localhost:5173'],
-  credentials: true
+// --- MIDDLEWARES DE SÉCURITÉ ---
+// Mise en place de Helmet pour sécuriser les headers HTTP
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
-// Logging in development
+// Nettoyage des données contre les injections NoSQL
+app.use(mongoSanitize());
+
+// Nettoyage des données contre les attaques XSS
+app.use(xss());
+
+// Limitation du taux de requêtes (Anti-DDoS / Brute force)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // max 100 requêtes par IP
+});
+app.use('/api/', limiter);
+
+// --- MIDDLEWARES DE PERFORMANCE ---
+// Compression Gzip des réponses
+app.use(compression());
+
+// --- CONFIGURATION CORS ---
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://service-pu.vercel.app',
+  'https://service-pu-git-main-famenonandrianinas-projects.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000'
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Permissif pour la démo, mais on garde la liste
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// --- PARSERS & LOGS ---
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-// Body parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static files - uploaded documents
+// --- FICHIERS STATIQUES ---
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// API Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/services', require('./routes/serviceRoutes'));
-app.use('/api/services-publics', require('./routes/servicePublicRoutes'));
-app.use('/api/actualites', require('./routes/actualiteRoutes'));
-app.use('/api/demandes', require('./routes/demandeRoutes'));
-app.use('/api/reclamations', require('./routes/reclamationRoutes'));
-app.use('/api/annonces', require('./routes/annonceRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/gallery', require('./routes/galleryRoutes'));
+// --- ROUTES API ---
+const apiVersion = '/api';
+app.use(`${apiVersion}/auth`, require('./routes/authRoutes'));
+app.use(`${apiVersion}/services`, require('./routes/serviceRoutes'));
+app.use(`${apiVersion}/services-publics`, require('./routes/servicePublicRoutes'));
+app.use(`${apiVersion}/actualites`, require('./routes/actualiteRoutes'));
+app.use(`${apiVersion}/demandes`, require('./routes/demandeRoutes'));
+app.use(`${apiVersion}/reclamations`, require('./routes/reclamationRoutes'));
+app.use(`${apiVersion}/annonces`, require('./routes/annonceRoutes'));
+app.use(`${apiVersion}/users`, require('./routes/userRoutes'));
+app.use(`${apiVersion}/gallery`, require('./routes/galleryRoutes'));
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'API Services Publics opérationnelle', timestamp: new Date() });
+// Health check pour le déploiement Cloud (Render/Railway)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP', timestamp: new Date() });
 });
 
-// 404 handler
+// --- GESTION DES ERREURS ---
+// 404
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: `Route ${req.originalUrl} non trouvée` });
+  res.status(404).json({ success: false, message: `Route ${req.originalUrl} inexistante` });
 });
 
-// Global error handler
+// Global Error Handler (Centralisé)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`\n🚀 Serveur en ligne sur http://localhost:${PORT}`);
-  console.log(`📊 Mode: ${process.env.NODE_ENV}`);
-  console.log(`🌐 Client: ${process.env.CLIENT_URL}\n`);
+const server = app.listen(PORT, () => {
+  console.log(`\n✅ Serveur PRODUCTION prêt sur le port ${PORT}`);
+  console.log(`🌍 URL Client autorisée: ${process.env.CLIENT_URL}\n`);
+});
+
+// Gestion des erreurs fatales (Uncaught Exception / Unhandled Rejection)
+process.on('unhandledRejection', (err) => {
+  console.log('❌ UNHANDLED REJECTION! Fin du processus...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
 module.exports = app;

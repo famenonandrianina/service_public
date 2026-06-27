@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { galleryAPI } from '../../api';
+import { API_BASE_URL } from '../../utils/constants';
 import { Image, Plus, Trash2, X, Upload, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -97,7 +98,7 @@ const AdminGallery = () => {
             <div key={photo._id} className="group relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500">
               <div className="aspect-square overflow-hidden bg-gray-100">
                 <img 
-                  src={`http://localhost:5000${photo.imageUrl}`} 
+                  src={`${API_BASE_URL}${photo.imageUrl}`} 
                   alt={photo.titre} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />

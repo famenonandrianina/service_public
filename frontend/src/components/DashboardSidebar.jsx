@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { demandeAPI } from '../api';
+import { API_BASE_URL } from '../utils/constants';
 
 const DashboardSidebar = ({ role = 'user' }) => {
   const location = useLocation();
@@ -98,7 +99,7 @@ const DashboardSidebar = ({ role = 'user' }) => {
            <div className="flex items-center gap-3 mb-1">
               <div className="w-10 h-10 rounded-[12px] bg-white flex items-center justify-center text-green-600 font-bold border border-slate-100 shadow-sm overflow-hidden">
                 {user?.avatar ? (
-                  <img src={`http://localhost:5000${user.avatar}`} alt="avatar" className="w-full h-full object-cover" />
+                  <img src={`${API_BASE_URL}${user.avatar}`} alt="avatar" className="w-full h-full object-cover" />
                 ) : (
                   user?.nom?.charAt(0)?.toUpperCase() || 'U'
                 )}

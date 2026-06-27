@@ -5,6 +5,7 @@ import { FiArrowRight, FiCheckCircle, FiUsers, FiSettings, FiActivity } from 're
 import MainLayout from '../layouts/MainLayout';
 import { statsData } from '../data/mockData';
 import { galleryAPI } from '../api';
+import { API_BASE_URL } from '../utils/constants';
 
 const Hero = () => {
   return (
@@ -160,7 +161,7 @@ const GallerySection = () => {
             className="group h-[400px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 transition-all relative"
           >
             <img 
-              src={photo.imageUrl?.startsWith('http') ? photo.imageUrl : `http://localhost:5000${photo.imageUrl}`} 
+              src={photo.imageUrl?.startsWith('http') ? photo.imageUrl : `${API_BASE_URL}${photo.imageUrl}`} 
               alt={photo.titre} 
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
             />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../api';
+import { API_BASE_URL } from '../utils/constants';
 import { 
   User, Mail, Phone, MapPin, Shield, Lock, 
   Check, Loader, ArrowRight, Camera
@@ -94,7 +95,7 @@ const ProfilePage = () => {
                 <div className="w-32 h-32 rounded-[2.5rem] bg-white border-8 border-white flex items-center justify-center text-green-600 text-5xl font-black shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500 overflow-hidden">
                   {user?.avatar ? (
                     <img 
-                      src={`http://localhost:5000${user.avatar}`} 
+                      src={`${API_BASE_URL}${user.avatar}`} 
                       alt={user.nom} 
                       className="w-full h-full object-cover"
                     />
