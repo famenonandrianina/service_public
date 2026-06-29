@@ -17,38 +17,40 @@ connectDB();
 const app = express();
 
 // =============================================
-// --- 1. CORS — DOIT ÊTRE EN PREMIER ---
+// --- 1. CORS MANUEL — ABSOLUMENT EN PREMIER ---
 // =============================================
-const allowedOrigins = [
+const ALLOWED_ORIGINS = [
   'https://service-public-two.vercel.app',
   'https://service-pu.vercel.app',
-  'https://service-pu-git-main-famenonandrianinas-projects.vercel.app',
-  process.env.CLIENT_URL,
   'http://localhost:5173',
   'http://localhost:5174',
-  'http://localhost:3000'
-].filter(Boolean);
+  'http://localhost:3000',
+];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Autoriser les requêtes sans origin (mobile, Postman, curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error(`CORS bloqué pour l'origine: ${origin}`), false);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  optionsSuccessStatus: 200 // Certains navigateurs (Safari) ont besoin de 200
-};
+// Injection manuelle des headers CORS sur CHAQUE réponse
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
 
-// Appliquer CORS sur toutes les routes
-app.use(cors(corsOptions));
+  // Si l'origine est dans la liste autorisée, on l'ajoute
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if (!origin) {
+    // Requêtes sans origine (Postman, mobile, Render health check)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
 
-// Gérer explicitement les requêtes preflight OPTIONS
-app.options('*', cors(corsOptions));
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight 24h
+
+  // Répondre immédiatement aux requêtes preflight OPTIONS
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  next();
+});
 
 // =============================================
 // --- 2. MIDDLEWARES DE SÉCURITÉ ---
@@ -56,8 +58,6 @@ app.options('*', cors(corsOptions));
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
-app.use(mongoSanitize());
-app.use(xss());
 
 // Limitation du taux de requêtes
 const limiter = rateLimit({
@@ -75,6 +75,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Nettoyage anti-injection (après parsing body)
+app.use(mongoSanitize());
+app.use(xss());
 
 // --- FICHIERS STATIQUES ---
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -110,11 +114,12 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`\n✅ Serveur PRODUCTION prêt sur le port ${PORT}`);
-  console.log(`🌍 URL Client autorisée: ${process.env.CLIENT_URL}\n`);
+  console.log(`🌍 Mode: ${process.env.NODE_ENV}`);
+  console.log(`🌐 Origines autorisées: ${ALLOWED_ORIGINS.join(', ')}\n`);
 });
 
 process.on('unhandledRejection', (err) => {
-  console.log('❌ UNHANDLED REJECTION! Fin du processus...');
+  console.log('❌ UNHANDLED REJECTION!');
   console.log(err.name, err.message);
   server.close(() => {
     process.exit(1);
