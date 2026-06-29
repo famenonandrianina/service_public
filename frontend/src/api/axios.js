@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.PROD
+    ? 'https://service-pu.onrender.com/api'
+    : 'http://localhost:5000/api'),
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' }
 });
 
