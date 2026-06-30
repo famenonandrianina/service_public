@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 import { demandeAPI } from '../api';
 import { API_BASE_URL } from '../utils/constants';
 
-const DashboardSidebar = ({ role = 'user' }) => {
+const DashboardSidebar = ({ role = 'user', onClose }) => {
   const location = useLocation();
   const { logout, user } = useAuth();
 
@@ -50,8 +50,8 @@ const DashboardSidebar = ({ role = 'user' }) => {
   const links = role === 'admin' ? adminLinks : userLinks;
 
   return (
-    <div className="w-72 bg-slate-50 h-screen fixed left-0 top-0 border-r border-slate-200 flex flex-col z-50 shadow-xl">
-      <div className="p-8 flex items-center gap-3">
+    <div className="w-72 bg-slate-50 h-screen border-r border-slate-200 flex flex-col shadow-xl">
+      <div className="p-6 lg:p-8 flex items-center gap-3">
         <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-200">
           <FiLayout className="text-xl" />
         </div>
@@ -68,6 +68,7 @@ const DashboardSidebar = ({ role = 'user' }) => {
             <Link
               key={link.path}
               to={link.path}
+              onClick={() => onClose?.()}
               className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group ${
                 isActive 
                   ? 'bg-green-600 text-white shadow-lg shadow-green-100 scale-[1.02]' 
@@ -94,7 +95,7 @@ const DashboardSidebar = ({ role = 'user' }) => {
         })}
       </div>
 
-      <div className="p-6 mt-auto">
+      <div className="p-4 lg:p-6 mt-auto">
         <div className="bg-slate-50 p-4 rounded-3xl mb-4 border border-slate-100">
            <div className="flex items-center gap-3 mb-1">
               <div className="w-10 h-10 rounded-[12px] bg-white flex items-center justify-center text-green-600 font-bold border border-slate-100 shadow-sm overflow-hidden">

@@ -40,14 +40,36 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (data) => {
+  console.log('========================================');
+  console.log('🔐 TENTATIVE D\'INSCRIPTION');
+  console.log('📤 Données envoyées:', data);
+  console.log('🔗 API URL utilisée:', import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://service-pu.onrender.com/api' : 'http://localhost:5000/api'));
+  
+  try {
     const res = await authAPI.register(data);
+    console.log('✅ RÉPONSE API RÉUSSIE:', res);
     const { token, user } = res.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
     setUser(user);
     toast.success('Compte créé avec succès !');
+    console.log('========================================');
     return user;
-  };
+  } catch (err) {
+    console.error('❌❌❌ ERREUR INSCRIPTION ❌❌❌');
+    console.error('Erreur complète:', err);
+    console.error('→ Nom de l\'erreur:', err.name);
+    console.error('→ Message:', err.message);
+    console.error('→ Response:', err.response);
+    console.error('→ Response data:', err.response?.data);
+    console.error('→ Response status:', err.response?.status);
+    console.error('→ IsAxiosError:', err.isAxiosError);
+    console.error('→ Request config:', err.config);
+    console.error('========================================');
+    
+    throw err;
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('token');

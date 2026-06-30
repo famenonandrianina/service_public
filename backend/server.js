@@ -17,7 +17,7 @@ connectDB();
 const app = express();
 
 // =============================================
-// --- 1. CORS MANUEL — ABSOLUMENT EN PREMIER ---
+// --- 1. CORS CONFIGURATION (RELIABLE) ---
 // =============================================
 const ALLOWED_ORIGINS = [
   'https://service-public-two.vercel.app',
@@ -27,30 +27,28 @@ const ALLOWED_ORIGINS = [
   'http://localhost:3000',
 ];
 
-// Injection manuelle des headers CORS sur CHAQUE réponse
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
+console.log('🌐 Origines CORS autorisées:', ALLOWED_ORIGINS);
 
-  // Si l'origine est dans la liste autorisée, on l'ajoute
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else if (!origin) {
-    // Requêtes sans origine (Postman, mobile, Render health check)
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+app.use(cors({
+  origin: (origin, callback) => {
+    console.log('📥 Requête CORS depuis:', origin);
+    
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      console.log('✅ Origine autorisée');
+      callback(null, true);
+    } else {
+      console.log('❌ Origine NON autorisée');
+      callback(null, false); // Utilise false au lieu d'une erreur pour éviter les problèmes
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  maxAge: 86400 // 24h
+}));
 
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight 24h
-
-  // Répondre immédiatement aux requêtes preflight OPTIONS
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  next();
-});
+// Répondre immédiatement aux requêtes OPTIONS pour les pré-vérifications CORS
+app.options('*', cors());
 
 // =============================================
 // --- 2. MIDDLEWARES DE SÉCURITÉ ---
@@ -70,9 +68,7 @@ app.use('/api/', limiter);
 app.use(compression());
 
 // --- PARSERS & LOGS ---
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+app.use(morgan('dev')); // Enable logging in ALL environments!
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 

@@ -6,13 +6,27 @@ const generateToken = require('../utils/generateToken');
 // @access  Public
 const register = async (req, res) => {
   try {
+    console.log('===================== NOUVELLE INSCRIPTION =====================');
+    console.log('📥 HEADERS:', req.headers);
+    console.log('📥 ORIGINE:', req.headers.origin);
+    console.log('📥 Données reçues pour inscription:', req.body);
+    
     const { nom, email, motDePasse, telephone, adresse, role } = req.body;
 
+    if (!nom || !email || !motDePasse) {
+      const errMsg = 'Tous les champs obligatoires sont requis (nom, email, mot de passe)';
+      console.log('❌ Champs manquants:', { nom: !!nom, email: !!email, motDePasse: !!motDePasse });
+      return res.status(400).json({ success: false, message: errMsg });
+    }
+
+    console.log('🔍 Vérification si email existe déjà:', email);
     const userExists = await User.findOne({ email });
     if (userExists) {
+      console.log('❌ Email déjà utilisé:', email);
       return res.status(400).json({ success: false, message: 'Cet email est déjà utilisé' });
     }
 
+    console.log('📝 Création de l utilisateur...');
     const user = await User.create({ 
       nom, 
       email, 
@@ -21,7 +35,13 @@ const register = async (req, res) => {
       adresse, 
       role: role === 'admin' ? 'admin' : 'citoyen' 
     });
+    
+    console.log('✅ Utilisateur créé avec succès:', user._id);
     const token = generateToken(user._id);
+
+    console.log('✅ Token généré:', token ? 'Oui' : 'Non');
+    console.log('✅ Réponse envoyée avec succès');
+    console.log('==============================================================');
 
     res.status(201).json({
       success: true,
@@ -38,7 +58,17 @@ const register = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('❌❌❌ ERREUR CRITIQUE INSCRIPTION ❌❌❌');
+    console.error('Nom de l erreur:', error.name);
+    console.error('Message:', error.message);
+    console.error('Stack trace:', error.stack);
+    console.error('==============================================================');
+    
+    res.status(500).json({ 
+      success: false, 
+      message: error.message, 
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined 
+    });
   }
 };
 
@@ -47,9 +77,11 @@ const register = async (req, res) => {
 // @access  Public
 const login = async (req, res) => {
   try {
+    console.log('📥 Données reçues pour connexion:', req.body);
     const { email, motDePasse } = req.body;
 
     if (!email || !motDePasse) {
+      console.log('❌ Champs manquants pour connexion');
       return res.status(400).json({ success: false, message: 'Email et mot de passe requis' });
     }
 
@@ -57,7 +89,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+motDePasse');
     
     if (!user) {
-      console.log('Utilisateur non trouvé en base');
+      console.log('❌ Utilisateur non trouvé en base');
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
@@ -65,14 +97,17 @@ const login = async (req, res) => {
     console.log(`Mot de passe correct : ${isMatch}`);
 
     if (!isMatch) {
+      console.log('❌ Mot de passe incorrect');
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
     if (!user.actif) {
+      console.log('❌ Compte désactivé');
       return res.status(401).json({ success: false, message: 'Compte désactivé, contactez l\'administration' });
     }
 
     const token = generateToken(user._id);
+    console.log('✅ Connexion réussie pour:', user.email);
 
     res.json({
       success: true,
@@ -89,6 +124,7 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('❌ ERREUR CONNEXION:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
