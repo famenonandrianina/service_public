@@ -21,6 +21,7 @@ const app = express();
 // =============================================
 const ALLOWED_ORIGINS = [
   'https://service-public-two.vercel.app',
+  'https://service-public-deux.vercel.app', // NOUVEAU DOMAINE
   'https://service-pu.vercel.app',
   'http://localhost:5173',
   'http://localhost:5174',
