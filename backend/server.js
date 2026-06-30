@@ -29,21 +29,15 @@ const ALLOWED_ORIGINS = [
 
 console.log('🌐 Origines CORS autorisées:', ALLOWED_ORIGINS);
 
+// Configuration CORS ultra permissive pour test
 app.use(cors({
   origin: (origin, callback) => {
     console.log('📥 Requête CORS depuis:', origin);
-    
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      console.log('✅ Origine autorisée');
-      callback(null, true);
-    } else {
-      console.log('❌ Origine NON autorisée');
-      callback(null, false); // Utilise false au lieu d'une erreur pour éviter les problèmes
-    }
+    callback(null, true); // Autorise TOUTES les origines pour le moment (pour test)
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   maxAge: 86400 // 24h
 }));
 
